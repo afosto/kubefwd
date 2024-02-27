@@ -3,6 +3,7 @@ package fwdservice
 import (
 	"context"
 	"fmt"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -76,7 +77,8 @@ type ServiceFWD struct {
 	ForwardIPReservations    []string // cli passed IP reservations
 }
 
-/**
+/*
+*
 add port map
 @url https://github.com/txn2/kubefwd/issues/121
 */
@@ -126,7 +128,17 @@ func (svcFwd *ServiceFWD) SyncPodForwards(force bool) {
 
 		defer func() { svcFwd.LastSyncedAt = time.Now() }()
 
-		k8sPods := svcFwd.GetPodsForService()
+		var k8sPods []v1.Pod
+
+		for i := 1; i <= 3 || len(k8sPods) > 0; i++ {
+			k8sPods = svcFwd.GetPodsForService()
+			if len(k8sPods) > 0 {
+				break
+			}
+
+			log.Debugf("No Running Pods returned for service %s, attempt %d", svcFwd, i)
+			time.Sleep(5 * time.Second)
+		}
 
 		// If no pods are found currently. Will try again next re-sync period.
 		if len(k8sPods) == 0 {
@@ -195,7 +207,7 @@ func (svcFwd *ServiceFWD) SyncPodForwards(force bool) {
 	// This would hammer k8s with load needlessly.  We therefore use a debouncer to only update pods
 	// if things have been stable for at least a few seconds.  However, if things never stabilize we
 	// will still reload this information at least once every 5 minutes.
-	if force || time.Since(svcFwd.LastSyncedAt) > 5*time.Minute {
+	if force || time.Since(svcFwd.LastSyncedAt) > time.Minute {
 		// Replace current debounced function with no-op
 		svcFwd.SyncDebouncer(func() {})
 
@@ -341,6 +353,7 @@ func (svcFwd *ServiceFWD) LoopPodsToForward(pods []v1.Pod, includePodNameInHost 
 					case <-pfo.ManualStopChan: // if shutdown was given, don't log a warning as it's an intented stopping.
 					default:
 						log.Warnf("Stopped forwarding pod %s for %s", pfo.PodName, svcFwd)
+						os.Exit(0)
 					}
 				}
 			}()

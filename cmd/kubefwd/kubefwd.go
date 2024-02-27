@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,7 @@ import (
 )
 
 var globalUsage = ``
-var Version = "0.0.0"
+var Version = "I Too Like to Live Dangerously"
 
 func init() {
 	// quiet version
@@ -94,11 +94,12 @@ func main() {
 		TimestampFormat: "15:04:05",
 	})
 
-	log.Print(` _          _           __             _`)
-	log.Print(`| | ___   _| |__   ___ / _|_      ____| |`)
-	log.Print(`| |/ / | | | '_ \ / _ \ |_\ \ /\ / / _  |`)
-	log.Print(`|   <| |_| | |_) |  __/  _|\ V  V / (_| |`)
-	log.Print(`|_|\_\\__,_|_.__/ \___|_|   \_/\_/ \__,_|`)
+	log.Print(`_____   ______          ________ _____   _____`)
+	log.Print(`|  __ \ / __ \ \        / /  ____|  __ \ / ____|`)
+	log.Print(`| |__) | |  | \ \  /\  / /| |__  | |__) | (___`)
+	log.Print(`|  ___/| |  | |\ \/  \/ / |  __| |  _  / \___ \`)
+	log.Print(`| |    | |__| | \  /\  /  | |____| | \ \ ____) |`)
+	log.Print(`|_|     \____/   \/  \/   |______|_|  \_\_____/`)
 	log.Print("")
 	log.Printf("Version %s", Version)
 	log.Print("https://github.com/txn2/kubefwd")

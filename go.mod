@@ -1,6 +1,6 @@
 module github.com/txn2/kubefwd
 
-go 1.18
+go 1.19
 
 require (
 	github.com/bep/debounce v1.2.0
